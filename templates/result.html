@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五子棋對弈 - 遊戲結果</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background-image: linear-gradient(to bottom right, #f0e8d5, #deb887);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            font-size: 48px;
+            color: #8b4513;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 24px;
+            color: #8b4513;
+            margin-bottom: 30px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            background-color: #8b4513;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        button:hover {
+            transform: scale(1.2);
+        }
+
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 6px;
+            height: 12px;
+            background-color: #ff69b4;
+            animation: confettiFall 3s linear infinite;
+            will-change: transform, opacity;
+            opacity: 0;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-20vh) rotateZ(0deg);
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.90;
+            }
+            100% {
+                transform: translateY(100vh) rotateZ(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="fireworks"></div>
+    <h1>遊戲結果</h1>
+    <p id="resultText"></p>
+    <button onclick="location.href='/game'">再玩一局</button>
+
+    <script>
+        // 從 localStorage 獲取遊戲結果並顯示
+        var result = localStorage.getItem('gameResult');
+        document.getElementById('resultText').textContent = result;
+
+        if(!result){
+            location.href='/';
+        }
+
+        // 根據遊戲結果顯示不同的動畫
+        var fireworksContainer = document.querySelector('.fireworks');
+
+        function createConfetti(count, colors) {
+            var fragment = document.createDocumentFragment();
+            for (var i = 0; i < count; i++) {
+                var confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.transform = 'rotateZ(' + (Math.random() * 360) + 'deg)';
+
+                fragment.appendChild(confetti);
+
+                // 在動畫結束時移除紙屑元素
+                confetti.addEventListener('animationend', function() {
+                    this.parentNode.removeChild(this);
+                });
+            }
+            fireworksContainer.appendChild(fragment);
+        }
+
+        if (result === '你贏了') {
+            var confettiCount = 60;
+            var colors = ['#B9B9FF', '#66B3FF', '#CF9E9E' , '#FFBD9D']; // 淡粉色和淡粉藍色
+
+            createConfetti(confettiCount, colors);
+        }
+
+        // 清除 localStorage 中的遊戲結果
+        localStorage.removeItem('gameResult');
+    </script>
+</body>
+</html>

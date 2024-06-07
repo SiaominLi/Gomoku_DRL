@@ -1,0 +1,220 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: #f0e8d5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: #a0522d;
+    color: white;
+    width: 100%;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+#board {
+    width: 600px;
+    height: 600px;
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-template-rows: repeat(15, 1fr);
+    background-color: #deb887;
+    border: 2px solid #8b4513;
+    margin-bottom: 20px;
+}
+
+.cell {
+    border: 1px solid #8b4513;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cell:hover {
+    background-color: #f3d5b2;
+}
+
+#buttons {
+    text-align: center;
+}
+
+button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #a0522d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #8b4513;
+}
+
+/* ... 其他樣式保持不變 ... */
+
+.start-screen, .result-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0e8d5;
+}
+
+.start-screen button, .result-screen button {
+    font-size: 24px;
+    padding: 15px 30px;
+    background-color: #8b4513;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.start-screen button:hover, .result-screen button:hover {
+    background-color: #a0522d;
+}
+
+.result-screen h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.cell {
+    border: 1px solid #8b4513;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: relative;
+}
+
+.cell:hover {
+    background-color: #f3d5b2;
+}
+
+.cell[data-player] {
+    cursor: default;
+}
+
+.cell[data-player]:hover {
+    background-color: transparent;
+}
+
+@keyframes place-piece {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.cell[data-player="1"]::before,
+.cell[data-player="-1"]::before {
+    content: "";
+    display: block;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: place-piece 0.3s ease-out;
+}
+
+.cell[data-player="1"]::before {
+    background: radial-gradient(circle at 50% 40%, #ffffff, #e0e0e0);
+}
+
+.cell[data-player="-1"]::before {
+    background: radial-gradient(circle at 50% 40%, #666666, #000000);
+}
+
+@keyframes rainbow-glow {
+    0% {
+        box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.8);
+    }
+    14% {
+        box-shadow: 0 0 10px 5px rgba(255, 165, 0, 0.8);
+    }
+    28% {
+        box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.8);
+    }
+    42% {
+        box-shadow: 0 0 10px 5px rgba(0, 128, 0, 0.8);
+    }
+    57% {
+        box-shadow: 0 0 10px 5px rgba(0, 0, 255, 0.8);
+    }
+    71% {
+        box-shadow: 0 0 10px 5px rgba(75, 0, 130, 0.8);
+    }
+    85% {
+        box-shadow: 0 0 10px 5px rgba(238, 130, 238, 0.8);
+    }
+    100% {
+        box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.8);
+    }
+}
+
+@keyframes winning-animation {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    25% {
+        transform: translate(-50%, -50%) scale(1.5) rotate(90deg);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1) rotate(180deg);
+    }
+    75% {
+        transform: translate(-50%, -50%) scale(1.5) rotate(270deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(360deg);
+    }
+}
+
+.cell[data-player="1"].winning-piece::before,
+.cell[data-player="-1"].winning-piece::before {
+    animation: winning-animation 1s ease-in-out infinite, rainbow-glow 4s linear infinite;
+}
